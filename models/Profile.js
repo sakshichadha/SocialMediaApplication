@@ -12,16 +12,13 @@ const ProfileSchema=new mongoose.Schema({
     bio:{
         type:String
     },
-    social:{
-    youtube:{
-    type:String
-    },
-    instagram:{
-    type:String
+    status:{
+        type:String
     }
+   
 
 }
     
    
-});
+);
 module.exports=profile=mongoose.model('profile',ProfileSchema);

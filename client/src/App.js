@@ -12,6 +12,10 @@ import {Provider} from 'react-redux';
 import {loadUser} from  './actions/auth';
 import setAuthToken from './utils/setAuthToken'
 import store from './store';
+import Dashboard from './components/dashboard/Dashboard'
+import CreateProfile from './components/profile-forms/CreateProfile'
+import EditProfile from './components/profile-forms/EditProfile'
+import PrivateRoute from './components/routing/PrivateRoute'
 console.log("yoo");
 //console.log(localStorage);
 //console.log("ABCDEFFFFFF"+localStorage.token);
@@ -39,6 +43,10 @@ const App = () => {
         <Switch>
         <Route exact path="/register" component={Register}/>
         <Route exact path="/login" component={Login}/>
+        <PrivateRoute exact path="/dashboard" component={Dashboard}/>
+        <PrivateRoute exact path="/create-profile" component={CreateProfile}/>
+        <PrivateRoute exact path="/edit-profile" component={EditProfile}/>
+
           </Switch>
         </section>
     </Fragment>

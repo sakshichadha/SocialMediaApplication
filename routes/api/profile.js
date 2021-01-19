@@ -8,10 +8,13 @@ const {check, validationResult }=require('express-validator/check');
 router.get('/me',auth,async (req,res)=>
 {
 try{
-const profile=await Profile.findOne({user:req.user.id}).populate('user',['name']);
+const profile=await Profile.findOne({user:req.user.id,}).populate(
+    'user',['name','avatar']);
 if(!profile)
+{
 return res.status(400).json({msg:'There is no profile for this user'});
-return json(profile)
+}
+res.json(profile);
 }
 catch(err){
     console.error(err.message);
@@ -20,23 +23,17 @@ catch(err){
 
 });
 //pos api/profile,private
-router.post('/',[auth,[check('status','Status is req').not().isEmpty()]],async(req,res)=>{
-const errors=validationResult(req);
-if(!error.isEmpty())
-return res.status(400).json({errors:errors.array()});
-const {location,bio,status,youtube,instagram}=req.body;
-const profileFields={};
-profileFields.user=req.user;
-if(location)
-profileFields.location=location;
-if(bio)
-profileFields.bio=bio;
-if(status)
-profileFields.status=status;
-profileFields.social={}
-if(youtube) profileFields.social.youtube=youtube;
-if(instgram) profileFields.social.instagram=instagram;
-res.send("hello");
+router.post('/',auth,async(req,res)=>{
+    console.log("INSIDEOUT")
+const {location,bio,status}=req.body;
+const profileFields={
+    user:req.user.id,
+    location:location,
+    bio:bio,
+    status:status
+};
+
+console.log(profileFields);
 //insert the data
 try{
 let profile=await Profile.findOne({user:req.user.id});
@@ -44,9 +41,12 @@ if(profile){
     //update
     profile=await Profile.findOneAndUpdate({user:req.user.id},
         {$set:profileFields},
-        {new :true});
+        {new :true})
+        return res.json(profile);
+        
 }//create
 profile=new Profile(profileFields);
+console.log("DONE profile");
 await profile.save();
 res.json(profile);
 }catch(err){
@@ -99,6 +99,10 @@ router.get('/user:user_id',async(req,res)=>{
         }
             
         });
+        //get all profiles route public
+        // router.get('/',async(req,res)=>{
+
+        // })
       
 
 module.exports=router;
