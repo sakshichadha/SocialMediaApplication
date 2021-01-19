@@ -1,5 +1,6 @@
 import axios from 'axios';
-import {REGISTER_SUCCESS,REGISTER_FAIL,USER_LOADED,AUTH_ERROR} from './types';
+import {REGISTER_SUCCESS,REGISTER_FAIL,USER_LOADED,
+  AUTH_ERROR,LOGIN_SUCCESS,LOGIN_FAIL,LOGOUT} from './types';
 import {setAlert} from './alert';
 import setAuthToken from '../utils/setAuthToken';
 
@@ -35,7 +36,8 @@ localStorage.setItem('token',res.data.token);
 dispatch({
   type:REGISTER_SUCCESS,
   payload:res.data
-})
+});
+dispatch(loadUser());
 }
 catch(err){
   const errors=err.response.data.errors;
@@ -43,6 +45,7 @@ catch(err){
   {
     errors.forEach(errpr=>dispatch(setAlert(errors.msg,'danger')));
   }
+
   dispatch(
     {
     type:REGISTER_FAIL
@@ -50,4 +53,45 @@ catch(err){
       
     );
   }
+}
+export const login = ({email,password}) => async dispatch => {
+  console.log(email);
+  
+  const config={
+    headers:{
+      'Content-Type':'application/json'
+    }
+  }
+    const body=JSON.stringify({email,password});
+    console.log(email);
+try{
+  console.log("FISH")
+const res=await axios.post('/api/auth',body,config);
+console.log("HIII");console.log(res);
+localStorage.setItem('token',res.data.token);
+dispatch({
+type:LOGIN_SUCCESS,
+payload:res.data
+});
+dispatch(loadUser());
+}
+catch(err){
+const errors=err.response.data.errors;
+if(errors)
+{
+errors.forEach(errpr=>dispatch(setAlert(errors.msg,'danger')));
+}
+localStorage.removeItem('token');
+
+dispatch(
+{
+type:LOGIN_FAIL
+}
+  
+);
+}
+}
+//logout
+export const logout=()=>dispatch=>{
+
 }

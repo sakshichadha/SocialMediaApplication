@@ -24,7 +24,7 @@ const App = () => {
   
     store.dispatch(loadUser())
     
-},[])
+},[]);
     // log user out from all tabs if they log out in one tab
     
   return(
@@ -45,7 +45,7 @@ const App = () => {
     </Router>
     </Provider>
   
-  );
+  )
 };
 
 export default App;
