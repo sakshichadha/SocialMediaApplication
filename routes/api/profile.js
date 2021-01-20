@@ -67,18 +67,18 @@ catch(err){
 }
     
 });
-router.get('/user:user_id',async(req,res)=>{
+router.get('/user/:user_id',async(req,res)=>{
     try{
     const profile=await Profile.findOne({user:req.params.user_id}).populate('user',['name']);
     if(!profile)
     return res.status(400).json({msg:'there is no profile for this user'});
 
-    res.json(profiles);
+    return res.json(profile);
     }
     catch(err){
        console.error(err.message);
-       if(err.kind=='ObjectId')
-       return res.status(400).json({msg:'there is no profile for this user'});
+    //    if(err.kind=='ObjectId')
+    //    return res.status(400).json({msg:'there is no profile for this user'});
        res.sendStatus(500).send('Server error');
     }
         
