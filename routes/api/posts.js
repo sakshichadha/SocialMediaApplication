@@ -8,24 +8,27 @@ const User=require('../../models/User');
 //private create a post
 router.post('/',auth,async(req,res)=>
 {
-const errors=validationResult(req);
-if(!errors.isEmpty())
-{
-    return res.status(400).json({errors:erros.array()});
-}
+//const errors=validationResult(req);
+// if(!errors.isEmpty())
+// {
+//     return res.status(400).json({errors:erros.array()});
+// }
 try {
+    const user=await User.findById(req.user.id).select('-password');
+    console.log("IN API ADD POST")
+    //console.log(req.body.text);
     const newPost=new Post({
         text:req.body.text,
-        name:yser.name,
+        name:user.name,
         user:req.user.id
     });
     const post=await newPost.save();
-    res.json(post);
+    res.json(newPost);
 } catch (error) {
     console.error(err.message);
     res.status(500).send('Server error');
 }
-const user=await User.findById(req.user.id).select('-password');
+
 
 });
 //get api/posts get all posts  private
@@ -95,9 +98,10 @@ return res.status(404).json({msg:'post not found'});
 });
 //like  route put api/posts/like/:id
 router.put('/like/:id',auth,async(req,res)=>
-{
+{ console.log("INSIDE ROUTE LIKE");
 try {
-    const post=await Post.findById(req.paramas.id);
+    const post=await Post.findById(req.params.id);
+    console.log("After")
     //check if already liked
     if(post.likes.filter(like=>like.user.toString()==req.user.id).length>0)
     {
@@ -105,11 +109,12 @@ return res.status(400).json({msg:'Post already liked'});
     }
     //unshift adds in the beginning
     post.likes.unshift({user:req.user.id});
+    console.log("done")
     await post.save();
     res.json(post.likes);
 
 } catch (error) {
-    console.error(err.message);
+    console.error(error.message);
     res.status(500).send('Server error');  
 }
 });
@@ -137,12 +142,12 @@ return res.status(400).json({msg:'Post already not liked'});
 });
 //comment
 router.post('/comment/:id',auth,async(req,res)=>
-{
-const errors=validationResult(req);
-if(!errors.isEmpty())
-{
-    return res.status(400).json({errors:erros.array()});
-}
+{ console.log("INSIDE ADD COMMENT ROUTE")
+// const errors=validationResult(req);
+// if(!errors.isEmpty())
+// {
+//     return res.status(400).json({errors:erros.array()});
+// }
 try {
     const user=await User.findById(req.user.id).select('-password');
     const post=await Post.findById(req.params.id);
@@ -152,8 +157,10 @@ try {
       user:req.user.id
     };
     post.comments.unshift(newComment);
+    console.log("DONE");
 
      await post.save();
+     console.log(post.comments);
     res.json(post.comments);
 } catch (error) {
     console.error(err.message);
