@@ -20,6 +20,7 @@ import Profiles from './components/profiles/Profiles'
 import Posts from './components/posts/Posts'
 import Post from './components/post/Post'
 import Profile from './components/profile/Profile'
+import ShowRequests from './components/profiles/ShowRequests'
 console.log("yoo");
 //console.log(localStorage);
 //console.log("ABCDEFFFFFF"+localStorage.token);
@@ -54,6 +55,7 @@ const App = () => {
         <PrivateRoute exact path="/edit-profile" component={EditProfile}/>
         <PrivateRoute exact path="/posts" component={Posts}/>
         <PrivateRoute exact path="/posts/:id" component={Post}/>
+        <PrivateRoute exact path="/ShowRequests" component={ShowRequests}/>
 
 
           </Switch>
