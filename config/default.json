@@ -1,4 +1,4 @@
 {
-    "mongoURI":"mongodb+srv://Sakshi_chadha:Blessings@219@mern.kd5gg.mongodb.net/<dbname>?retryWrites=true&w=majority",
+   //specify mongo URI
     "jwtSecret":"mysecrettoken"
 }
